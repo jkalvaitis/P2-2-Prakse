@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group divider</title>
+    <meta name="description" content="Content: Studenet group divider for teachers. Author: Jānis Kalvaitis P2-2.">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="header">
+        <h1>Group divider for teachers</h1>
+    </div>
+    <div class="content">
+        <div class="container">
+            <div class="forms">
+                <form id="groupSizeForm">
+                    <label for="groupSize">Max group size</label><br>
+                    <input type="number" id="groupSize" name="groupSize"><br>
+                    <button type="submit">Submit</button>
+                    <button type="reset">Reset input field</button>
+                    <button type="button" onclick="displayGroups()">Re-shuffle groups</button>
+                    <br>
+                </form>
+                <form id="studentNameForm">
+                    <label for="studentName">Student name</label><br>
+                    <textarea id="studentName" name="studentName" rows="2" cols="20"></textarea><br>
+                    <button type="submit">Submit</button>
+                    <button type="reset">Reset input field</button>
+                    <button onclick="clearStudentArray(); displayStudents(); displayGroups();">Clear array</button>
+                    <br>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="column">
+                <h2>Students:</h2>
+                <p id="studentOutput"></p>
+            </div>
+            <div class="column">
+                <h2>Student Groups:</h2>
+                <p id="studentGroups"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">Made by: Jānis Kalvaitis P2-2 &copy; 2025</div>
+
+    <script>
+        var maxGroupSize;
+        const students = [];
+        const groups = [];
+        
+        document.getElementById("groupSizeForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            maxGroupSize = parseInt(document.getElementById("groupSize").value);
+            if (isNaN(maxGroupSize) || maxGroupSize <= 0) {
+                window.alert("ERROR: Entered value was negative or NaN, try entering a positive value instead.");
+                maxGroupSize = 0;
+            }
+            displayStudents();
+            displayGroups();
+            // console.log("Max group size set to: ", maxGroupSize); // TEST CODE
+        });
+
+        document.getElementById("studentNameForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            let studentName = document.getElementById("studentName").value.trim();
+            if (studentName) {
+                let studentSplitArray = studentName.split("\n");
+                students.push(...studentSplitArray);
+                
+                document.getElementById("studentName").value = "";
+                // console.log("New student added: ", studentName); // TEST CODE
+            }
+            displayStudents();
+            displayGroups();
+        });
+
+        function displayStudents() {
+            const output = document.getElementById("studentOutput");
+            output.value = ""; 
+            if (students.length == 0) {
+                output.textContent = "No students added yet...";
+            }
+            else {
+                output.innerHTML = students.join("<br>");
+            }
+        }
+
+        function displayGroups() {
+            const output = document.getElementById("studentGroups");
+            if (students.length == 0 || !maxGroupSize || maxGroupSize == 0) {
+                output.textContent = "No valid group size or students to divide.";
+                return;
+            }
+
+            const tempStudents = [...students];
+            for (let i = 0; i < tempStudents.length; i++) {
+                let randomIndex = Math.floor(Math.random() * tempStudents.length);
+                let temp = tempStudents[randomIndex];
+                tempStudents[randomIndex] = tempStudents[i];
+                tempStudents[i] = temp;
+            }
+
+            let numOfGroups = Math.ceil(tempStudents.length / maxGroupSize);
+            
+            groups.length = 0;
+
+            const baseSize = Math.floor(tempStudents.length / numOfGroups); // example: 22 / 5 = 4 so every group has atleast 4 students
+            const extra = tempStudents.length % numOfGroups; // 22 % 5 means 2 students left over
+
+            let startIndex = 0;
+            for (let i = 0; i < numOfGroups; i++) {
+                const groupSize = i < extra ? baseSize + 1 : baseSize;
+                groups[i] = tempStudents.slice(startIndex, startIndex + groupSize);
+                startIndex += groupSize;
+            }
+
+            let groupText = "";
+            for (let i = 0; i < groups.length; i++) {
+                groupText += `<strong>Group ${i + 1}:</strong><br>${groups[i].join("<br>")}<br><br>`;
+            }
+
+            output.innerHTML = groupText;
+
+        }
+
+        function clearStudentArray() {
+            students.length = 0;
+        }
+
+
+    </script>
+</body>
+</html>

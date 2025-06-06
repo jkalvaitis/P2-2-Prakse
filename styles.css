@@ -1,0 +1,89 @@
+body {
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+.container {
+    background-color: lightgray;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 50%;
+    text-align: center;
+    border-style: double;
+    border-color: black;
+    padding: 20px;
+    box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+.column {
+    float: left;
+    width: 50%;
+    text-align: center;
+    padding-bottom: 70px;
+}
+
+form {
+    padding: 5px;
+    margin: 5px;
+}
+
+button {
+    margin-top: 3px;
+    box-shadow: 1px 1px 5px;
+}
+
+label {
+    margin-top: 5px;
+    font-size: 22px;
+}
+
+.header {
+    background-color: lightgray;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    padding-left: 0;
+}
+
+.footer {
+    background-color: lightgray;
+    text-align: center;
+    width: 100%;
+    padding: 20px;
+    padding-left: 0;
+    left: 0;
+    bottom: 0;
+    position: fixed;
+}
+
+.content {
+    flex: 1 0 auto;
+	margin: 0px auto;
+	width: 720px;
+}
+
+textarea {
+    resize: none;
+}
+
+@media only screen and (max-width: 700px) {
+	.content {
+		padding: 0px;
+		width: 100%;
+    }
+    .container {
+        width: 100%;
+        padding-left: 0;
+        border-left: none;
+        border-right: none;
+    }
+    .column {
+        width: 100%;
+        float: none;
+    }
+}
